@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Care for the Future</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inria Sans', sans-serif;
+            background: linear-gradient(31deg, #E2E2E2 0%, #B9BAE8 100%);
+            min-height: 100vh;
+            color: #2d1b4e;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+        }
+
+        /* === LOGO STYLES === */
+        .logo-container {
+            height: 70px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            max-height: 70px;
+            max-width: 290px;
+            object-fit: contain;
+        }
+
+        nav {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        nav a {
+            color: #2d1b4e;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .quest-btn {
+            background: #e8e0f5;
+            padding: 12px 35px;
+            border-radius: 40px;
+            border: 2px solid #8b7ba8;
+            color: #4d3d6b;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Inria Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .quest-btn img {
+            max-height: 50px;
+            object-fit: contain;
+        }
+
+        .wave-decoration {
+            text-align: center;
+            margin: 40px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .snake-logo-placeholder {
+            width: 250px;
+            height: 1700px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px dashed #7d6b94;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5d4a7a;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .snake-logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .snake-logo-container img {
+            max-height: 250px;
+            max-width: 170px;
+            object-fit: contain;
+        }
+        /* === END LOGO STYLES === */
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .main-title {
+            text-align: center;
+            font-size: 38px;
+            color: #3d2a5e;
+            margin: 40px 0;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        .search-box {
+            width: 600px;
+            padding: 18px 25px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(255, 255, 255, 0.6);
+            font-size: 16px;
+            font-family: 'Inria Sans', sans-serif;
+            color: #7d6b94;
+        }
+
+        .search-box::placeholder {
+            color: #b5a5c8;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .primary-btn {
+            background: #3d2a5e;
+            color: white;
+            padding: 15px 50px;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-family: 'Inria Sans', sans-serif;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .primary-btn:hover {
+            background: #3d2a5e;
+        }
+
+        .section-title {
+            font-size: 28px;
+            color: #3d2a5e;
+            margin: 60px 0 30px 0;
+        }
+
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .scenario-card {
+            background: #3d2a5e;
+            border-radius: 15px;
+            padding: 35px;
+            color: white;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card.expanded {
+            grid-column: 1 / -1;
+            min-height: 600px;
+        }
+
+        .figjam-embed {
+            display: none;
+            width: 100%;
+            height: 500px;
+            margin-top: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .figjam-embed.show {
+            display: block;
+        }
+
+        .figjam-embed iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+
+        .scenario-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .scenario-description {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .scenario-text-short {
+            display: inline;
+        }
+
+        .scenario-text-full {
+            display: none;
+        }
+
+        .scenario-text-full.show {
+            display: inline;
+        }
+
+        .scenario-link {
+            color: #b8a8d4;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .explore-btn {
+            background: #b8a8d4;
+            color: #361E7E;
+            padding: 12px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-family: 'Inria Sans', sans-serif;
+            cursor: pointer;
+            align-self: flex-start;
+            transition: background 0.3s;
+        }
+
+        .explore-btn:hover {
+            background: #d4c5e8;
+        }
+
+        .form-container {
+            display: none;
+            max-width: 1100px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+        }
+
+        .form-container.active {
+            display: flex;
+            gap: 50px;
+        }
+
+        .form-left {
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #2d1b4e;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 25px;
+            border: none;
+            background: #e8e0f5;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: #4d3d6b;
+            color: white;
+            padding: 15px 50px;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #3d2a5e;
+        }
+
+        .form-right {
+            flex: 0 0 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-area {
+            width: 100%;
+            height: 350px;
+            background: #f5f3f8;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .upload-area:hover {
+            background: #e8e0f5;
+        }
+
+        .upload-text {
+            margin-top: 20px;
+            color: #7d6b94;
+            font-size: 16px;
+        }
+
+        .phone-icon {
+            width: 80px;
+            height: 120px;
+            border: 3px solid #7d6b94;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .phone-icon::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: #7d6b94;
+            border-radius: 50%;
+        }
+
+        .phone-icon::after {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: #7d6b94;
+            border-radius: 50%;
+        }
+
+        .home-view {
+            display: block;
+        }
+
+        .home-view.hidden {
+            display: none;
+        }
+
+        .back-btn {
+            background: #b8a8d4;
+            color: #2d1b4e;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-family: 'Inria Sans', sans-serif;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #d4c5e8;
+        }
+
+        /* === CARE QUEST PAGE === */
+        .quest-view {
+            display: none;
+            padding: 60px 20px;
+        }
+
+        .quest-view.active {
+            display: block;
+        }
+
+        .quest-logo-center {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0 60px 0;
+        }
+
+        .quest-logo-center img {
+            max-height: 250px;
+            object-fit: contain;
+        }
+
+        .quest-welcome {
+            text-align: center;
+            font-size: 24px;
+            color: #3d2a5e;
+            max-width: 900px;
+            margin: 0 auto 60px auto;
+            line-height: 1.6;
+        }
+
+        .kit-preview {
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(139, 123, 168, 0.3);
+            border-radius: 20px;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .kit-image-placeholder {
+            width: 100%;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 2px dashed #7d6b94;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7d6b94;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .kit-image-placeholder img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .download-btn {
+            background: #3d2a5e;
+            color: white;
+            padding: 18px 60px;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-family: 'Inria Sans', sans-serif;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #2d1b4e;
+        }
+
+        .scroll-indicator {
+            display: flex;
+            justify-content: center;
+            margin-top: 60px;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator svg {
+            width: 50px;
+            height: 50px;
+            fill: #7d6b94;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        /* === END CARE QUEST PAGE === */
+    </style>
+</head>
+<body>
+    <!-- 
+    TO ADD YOUR LOCAL LOGOS:
+    1. Place your logo image files in the same folder as this HTML file
+    2. Update the src attributes below with your file names:
+       - logo-care-for-future.png (main logo, top left)
+       - logo-care-quest.png (Care Quest button, top right)
+       - logo-snake.png (decorative snake logo, center)
+    3. If your images are in a subfolder, use: src="folder-name/logo.png"
+    4. Supported formats: .png, .jpg, .svg, .webp
+    -->
+    
+    <header>
+        <div class="logo-container">
+            <!-- Replace 'logo-care-for-future.png' with your local file path -->
+            <img src="ASSETS/Careforthefuture.png" alt="Care for the Future" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="snake-logo-placeholder" style="display:none;">LOGO: Care for the Future</div>
+        </div>
+        <nav>
+            <a href="#" onclick="showHome()">Accueil</a>
+            <a href="#">à propos</a>
+            <a href="#">Articles</a>
+            <button class="quest-btn" onclick="showQuestPage()">
+                <!-- Replace 'logo-care-quest.png' with your local file path -->
+                <img src="ASSETS/CAREQUEST40.png" alt="Care Quest 2040" onerror="this.style.display='none'; this.parentElement.innerHTML='Care Quest 2040';">
+            </button>
+        </nav>
+    </header>
+
+    <div class="home-view" id="homeView">
+        <div class="wave-decoration">
+            <div class="snake-logo-container">
+                <!-- Replace 'logo-snake.png' with your local file path -->
+                <img src="ASSETS/snake.png" alt="Snake Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="snake-logo-placeholder" style="display:none;">LOGO: Snake</div>
+            </div>
+        </div>
+        
+        <h1 class="main-title">
+            Explorez les scénarios de soin en 2040 imaginés<br>
+            par des professionnels de santé
+        </h1>
+
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="titre de votre scénario">
+        </div>
+
+        <div class="button-group">
+            <button class="primary-btn">Explorez</button>
+            <button class="primary-btn" onclick="showForm()">Créez</button>
+        </div>
+
+        <div class="container">
+            <h2 class="section-title">+ Autres scénarios</h2>
+            
+            <div class="scenarios-grid">
+                <div class="scenario-card" id="scenario1">
+                    <div>
+                        <div class="scenario-title">+ La médecine en copilote</div>
+                        <div class="scenario-description">
+                            <span class="scenario-text-short">
+                                Vous êtes en 2040. La technologie est désormais un partenaire de bord inassociable dans le milieu de la santé. Tandis que le corps médical continue à exercer son art clinique comme auparavant,...
+                            </span>
+                            <span class="scenario-text-full">
+                                Vous êtes en 2040. La technologie est désormais un partenaire de bord inassociable dans le milieu de la santé. Tandis que le corps médical continue à exercer son art clinique comme auparavant, l'intelligence artificielle analyse en temps réel les données des patients, suggère des diagnostics et optimise les traitements. Les médecins gardent le contrôle final des décisions, mais s'appuient sur cette technologie comme un copilote expérimenté. Cette collaboration permet d'améliorer la précision des soins tout en préservant l'humanité essentielle de la relation médecin-patient.
+                            </span>
+                            <span class="scenario-link" onclick="toggleScenario(this)">voir plus</span>
+                        </div>
+                        <div class="figjam-embed" id="embed1">
+                            <iframe src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fboard%2Fo2EIhNQzJ3XI5nBOdYQZz1%2FUntitled%3Fnode-id%3D0-1%26t%3D4gJESFa8x472bORH-1" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <button class="explore-btn" onclick="toggleFigJam('scenario1', 'embed1', this)">Explorez</button>
+                </div>
+
+                <div class="scenario-card" id="scenario2">
+                    <div>
+                        <div class="scenario-title">+ L'empathie au cœur du soin</div>
+                        <div class="scenario-description">
+                            <span class="scenario-text-short">
+                                Vous êtes en 2040. Les capacités de diagnostic des machines ont atteint une précision quasi infaillible. Dans ce système, l'IA agit comme un puits de science instantané pour poser des diagnostics et...
+                            </span>
+                            <span class="scenario-text-full">
+                                Vous êtes en 2040. Les capacités de diagnostic des machines ont atteint une précision quasi infaillible. Dans ce système, l'IA agit comme un puits de science instantané pour poser des diagnostics et recommander des traitements. Cependant, le rôle des professionnels de santé évolue vers quelque chose de plus profond : ils deviennent les gardiens de l'empathie et du soutien émotionnel. Face à une machine parfaite mais froide, les patients ont plus que jamais besoin de la chaleur humaine, de l'écoute attentive et de la présence rassurante d'un soignant qui comprend leurs peurs et leurs espoirs.
+                            </span>
+                            <span class="scenario-link" onclick="toggleScenario(this)">voir plus</span>
+                        </div>
+                        <div class="figjam-embed" id="embed2">
+                            <iframe src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fboard%2FmNEoJ0dQy7rmEfm2cdASyr%2FUntitled%3Fnode-id%3D0-1%26t%3DP3ECbotByH0peoUG-1" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <button class="explore-btn" onclick="toggleFigJam('scenario2', 'embed2', this)">Explorez</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container" id="formView">
+        <div style="width: 100%;">
+            <button class="back-btn" onclick="showHome()">← Retour</button>
+            
+            <div class="wave-decoration">
+                <div class="snake-logo-container">
+                    <!-- Replace 'logo-snake.png' with your local file path -->
+                    <img src="ASSETS/snake.png" alt="Snake Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="snake-logo-placeholder" style="display:none;">LOGO: Snake</div>
+                </div>
+            </div>
+            
+            <h1 class="main-title">
+                Créez votre scénario de soin en 2040 imaginé par<br>
+                votre équipe
+            </h1>
+
+            <div style="display: flex; gap: 50px; margin-top: 40px;">
+                <div class="form-left">
+                    <form id="scenarioForm">
+                        <div class="form-group">
+                            <label for="teamName">Nom d'équipe</label>
+                            <input type="text" id="teamName" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="participants">Nombre de participants</label>
+                            <input type="number" id="participants" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="patients">Patients</label>
+                            <input type="text" id="patients" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="technologies">Technologie.s</label>
+                            <input type="text" id="technologies" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="story">Racontez le soin dans votre futur commun</label>
+                            <textarea id="story" required></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Soumettre</button>
+                    </form>
+                </div>
+
+                <div class="form-right">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="phone-icon"></div>
+                        <div class="upload-text">Déposez vos images ici</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="quest-view" id="questView">
+        <button class="back-btn" onclick="showHome()">← Retour</button>
+        
+        <div class="quest-logo-center">
+            <img src="ASSETS/CAREQUEST40.png" alt="Care Quest 2040" onerror="this.parentElement.innerHTML='<div class=\'snake-logo-placeholder\'>LOGO: Care Quest 2040</div>';">
+        </div>
+
+        <p class="quest-welcome">
+            Bienvenue dans Care Quest 2040. Dans cet atelier, vous et votre équipe allez vous<br>
+            projeter dans une fiction réaliste, un futur à 15 ans.
+        </p>
+
+        <div class="kit-preview">
+            <div class="kit-image-placeholder">
+                <!-- Replace with your kit preview image path -->
+                <img src="ASSETS/kit-preview.png" alt="Kit Preview" onerror="this.style.display='none'; this.parentElement.textContent='IMAGE: Kit Preview (Place your image at ASSETS/kit-preview.png)';">
+            </div>
+            
+            <button class="download-btn" onclick="downloadKit()">Téléchargez votre kit</button>
+        </div>
+
+        <div class="scroll-indicator">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 10l5 5 5-5z"/>
+                <path d="M7 14l5 5 5-5z" opacity="0.5"/>
+            </svg>
+        </div>
+    </div>
+
+    <script>
+        function showForm() {
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('formView').classList.add('active');
+            document.getElementById('questView').classList.remove('active');
+            window.scrollTo(0, 0);
+        }
+
+        function showHome() {
+            document.getElementById('homeView').classList.remove('hidden');
+            document.getElementById('formView').classList.remove('active');
+            document.getElementById('questView').classList.remove('active');
+            window.scrollTo(0, 0);
+        }
+
+        function showQuestPage() {
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('formView').classList.remove('active');
+            document.getElementById('questView').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function downloadKit() {
+            // Add your download file path here
+            const downloadPath = 'ASSETS/care-quest-kit.pdf'; // Change this to your actual file path
+            
+            // Create a temporary link element and trigger download
+            const link = document.createElement('a');
+            link.href = downloadPath;
+            link.download = 'Care-Quest-2040-Kit.pdf'; // Name of the downloaded file
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Alternative: Show alert if file is not ready
+            // alert('Téléchargement du kit Care Quest 2040...');
+        }
+
+        function toggleScenario(element) {
+            const description = element.closest('.scenario-description');
+            const shortText = description.querySelector('.scenario-text-short');
+            const fullText = description.querySelector('.scenario-text-full');
+            
+            if (fullText.classList.contains('show')) {
+                // Currently showing full text, switch to short
+                fullText.classList.remove('show');
+                shortText.style.display = 'inline';
+                element.textContent = 'voir plus';
+            } else {
+                // Currently showing short text, switch to full
+                fullText.classList.add('show');
+                shortText.style.display = 'none';
+                element.textContent = 'voir moins';
+            }
+        }
+
+        function toggleFigJam(cardId, embedId, button) {
+            const card = document.getElementById(cardId);
+            const embed = document.getElementById(embedId);
+            
+            if (card.classList.contains('expanded')) {
+                // Currently expanded, collapse it
+                card.classList.remove('expanded');
+                embed.classList.remove('show');
+                button.textContent = 'Explorez';
+            } else {
+                // Collapse all other cards first
+                document.querySelectorAll('.scenario-card').forEach(c => {
+                    c.classList.remove('expanded');
+                });
+                document.querySelectorAll('.figjam-embed').forEach(e => {
+                    e.classList.remove('show');
+                });
+                document.querySelectorAll('.explore-btn').forEach(btn => {
+                    btn.textContent = 'Explorez';
+                });
+                
+                // Expand this card
+                card.classList.add('expanded');
+                embed.classList.add('show');
+                button.textContent = 'Fermer';
+                
+                // Scroll to the card
+                setTimeout(() => {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            }
+        }
+
+        document.getElementById('scenarioForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Votre scénario a été soumis avec succès!');
+            this.reset();
+        });
+
+        const uploadArea = document.getElementById('uploadArea');
+        
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.background = '#e8e0f5';
+        });
+
+        uploadArea.addEventListener('dragleave', function(e) {
+            this.style.background = '#f5f3f8';
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.background = '#f5f3f8';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                alert(`${files.length} fichier(s) téléchargé(s)`);
+            }
+        });
+
+        uploadArea.addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.multiple = true;
+            input.accept = 'image/*';
+            
+            input.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    alert(`${this.files.length} fichier(s) sélectionné(s)`);
+                }
+            });
+            
+            input.click();
+        });
+    </script>
+</body>
+</html>
